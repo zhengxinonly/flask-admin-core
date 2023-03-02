@@ -1,6 +1,8 @@
 from flask import Flask
 
-from application.extensions import register_extension
+import application.orms
+from application.extensions import db, register_extension
+from application.extensions.init_script import register_script
 from config import config_dict
 
 
@@ -10,4 +12,7 @@ def create_app(cfg_name="dev"):
     app.config.from_object(config_object)
 
     register_extension(app)
+
+    if app.config.get("CONFIG_NAME") == "dev":
+        register_script(app)
     return app

@@ -1,1 +1,1 @@
-from .user import UserORM
+from application.orms.rights import PermissionORM, RoleORM, UserORM

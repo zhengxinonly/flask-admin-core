@@ -1,0 +1,4 @@
+id,name,code,desc,permission_code_list
+0,超级管理员,super_admin,,
+0,普通管理员,admin,,
+0,普通用户,user,,

@@ -2,6 +2,7 @@ import os
 
 
 class Base:
+    ROOT_PATH = os.path.dirname(__file__)
     REDIS_HOST = "127.0.0.1"
     REDIS_PORT = 3306
 
@@ -9,7 +10,7 @@ class Base:
     MYSQL_PORT = 3306
     MYSQL_USER = "root"
     MYSQL_PWD = "root"
-    MYSQL_DB = ""
+    MYSQL_DB = "flask_admin"
 
     SECRET_KEY = os.urandom(16)
 
@@ -18,15 +19,15 @@ class Base:
 
 
 class Development(Base):
-    pass
+    CONFIG_NAME = "dev"
 
 
 class Tester(Base):
-    pass
+    CONFIG_NAME = "test"
 
 
 class Production(Base):
-    pass
+    CONFIG_NAME = "prod"
 
 
 config_dict = {
