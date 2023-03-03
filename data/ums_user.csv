@@ -1,2 +1,2 @@
-id,nickname,username,password,mobile,create_at
-0,正心全栈编程,正心,123456,18675867241,2023-03-02 00:00:00
+id,nickname,username,password,mobile,email,create_at
+0,正心全栈编程,正心,123456,18675867241,,2023-03-02 00:00:00
