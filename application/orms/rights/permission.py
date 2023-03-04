@@ -23,3 +23,14 @@ class PermissionORM(db.Model):
         secondary="ums_role_permission",
         back_populates="permission_list",
     )
+
+    def json(self):
+        return {
+            "id": self.id,
+            "permission_name": self.permission_name,
+            "permission_code": self.permission_code,
+            "permission_type": self.permission_type,
+            "permission_url": self.permission_url,
+            "open_type": self.open_type,
+            "pid": self.pid,
+        }

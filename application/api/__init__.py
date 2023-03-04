@@ -1,6 +1,8 @@
 from flask import Blueprint, Flask
 
 from application.api.passport import LoginApi, LogoutApi
+from application.api.rights import RightsAPI
+from application.api.roles import RoleAPI
 from application.api.users import UserApi, user_state_func
 from application.utils.functools import register_rest_api
 
@@ -20,4 +22,9 @@ def register_api(app: Flask):
     api.add_url_rule(
         "/user/<int:uid>/state", view_func=user_state_func, methods=["PUT"]
     )
+
+    register_rest_api(api, RightsAPI, "rights_api", "/rights/", pk="rights_id")
+
+    register_rest_api(api, RoleAPI, "role_api", "/role/", pk="role_id")
+
     app.register_blueprint(api)
