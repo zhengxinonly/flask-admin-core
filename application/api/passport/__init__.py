@@ -1,6 +1,11 @@
 from flask import Blueprint, request
 from flask.views import MethodView
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    current_user,
+    jwt_required,
+)
 
 from application.orms import UserORM
 from application.utils.response_code import RetCode
@@ -37,7 +42,8 @@ class LoginApi(MethodView):
         return {
             "result": {
                 "access_token": "Bearer " + access_token,
-                "refresh_token": refresh_token,
+                "refresh_token": "Bearer " + refresh_token,
+                "user_data": user.json(),
             },
             "meta": {
                 "code": RetCode.OK.code,
@@ -58,3 +64,36 @@ class LogoutApi(MethodView):
                 "message": "用户退出成功",
             },
         }
+
+
+@jwt_required()
+def repassword_func():
+    user: UserORM = current_user
+    oldpassword = request.json.get("oldpassword")
+    newpassword = request.json.get("newpassword")
+    repassword = request.json.get("repassword")
+
+    if not user.check_password(oldpassword):
+        return {
+            "meta": {
+                "message": "用户密码错误",
+                "status": "fail",
+            },
+        }, 401
+    if newpassword != repassword:
+        return {
+            "meta": {
+                "message": "两次密码不一样",
+                "status": "fail",
+            },
+        }, 401
+    user.password = newpassword
+    user.save_to_db()
+
+    return {
+        "result": user.json(),
+        "meta": {
+            "message": "用户密码修改成功",
+            "status": "success",
+        },
+    }

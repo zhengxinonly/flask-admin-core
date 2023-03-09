@@ -106,9 +106,41 @@ def user_state_func(uid):
     user.save_to_db()
 
     return {
-        "result": user.save_to_db(),
+        "result": user.json(),
         "meta": {
             "message": "设置状态成功",
+            "status": "success",
+        },
+    }
+
+
+def user_repassword_func(uid):
+    user: UserORM = UserORM.query.get(uid)
+    oldpassword = request.json.get("oldpassword")
+    newpassword = request.json.get("newpassword")
+    repassword = request.json.get("repassword")
+
+    if not user.check_password(oldpassword):
+        return {
+            "meta": {
+                "message": "用户密码错误",
+                "status": "fail",
+            },
+        }
+    if newpassword != repassword:
+        return {
+            "meta": {
+                "message": "两次密码不一样",
+                "status": "fail",
+            },
+        }
+    user.password = newpassword
+    user.save_to_db()
+
+    return {
+        "result": user.json(),
+        "meta": {
+            "message": "用户密码修改成功",
             "status": "success",
         },
     }
